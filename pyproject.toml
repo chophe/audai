@@ -10,13 +10,8 @@ dependencies = [
     "rich>=13.0.0",
     "openai>=1.0.0",
     "python-dotenv>=1.0.0",
-    "pyaudio>=0.2.11",
-    "pydub>=0.25.1",
     "requests>=2.31.0",
-    "langchain>=0.1.0",
-    "langchain-openai>=0.1.0",
-    "keyboard>=0.13.5",
-    "playsound>=1.3.0"
+    "keyboard>=0.13.5"
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
@@ -36,4 +31,4 @@ allow-direct-references = true
 packages = ["src/audai"]
 
 [project.scripts]
-audai = "audai.cli:app"
+audai = "audai.cli:main_cli"
