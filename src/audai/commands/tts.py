@@ -265,8 +265,45 @@ def list_voices(
         console.print(f"[yellow]Available models: {', '.join(available_models)}[/yellow]")
         raise typer.Exit(1)
     
-    # Common voices for different providers
-    voice_info = {
+    # Model-specific voice information
+    model_voices = {
+        # OpenAI TTS models
+        'tts-1': {
+            'alloy': 'Neutral, balanced voice',
+            'echo': 'Clear, expressive voice',
+            'fable': 'Warm, engaging voice',
+            'onyx': 'Deep, authoritative voice',
+            'nova': 'Bright, energetic voice',
+            'shimmer': 'Soft, gentle voice'
+        },
+        'tts-1-hd': {
+            'alloy': 'Neutral, balanced voice (HD quality)',
+            'echo': 'Clear, expressive voice (HD quality)',
+            'fable': 'Warm, engaging voice (HD quality)',
+            'onyx': 'Deep, authoritative voice (HD quality)',
+            'nova': 'Bright, energetic voice (HD quality)',
+            'shimmer': 'Soft, gentle voice (HD quality)'
+        },
+        'gpt-4o-mini-tts': {
+            'alloy': 'Neutral, balanced voice (GPT-4o Mini)',
+            'echo': 'Clear, expressive voice (GPT-4o Mini)',
+            'fable': 'Warm, engaging voice (GPT-4o Mini)',
+            'onyx': 'Deep, authoritative voice (GPT-4o Mini)',
+            'nova': 'Bright, energetic voice (GPT-4o Mini)',
+            'shimmer': 'Soft, gentle voice (GPT-4o Mini)'
+        },
+        'gemini-2.5-flash-preview-tts': {
+            'alloy': 'Neutral, balanced voice (Gemini 2.5 Flash)',
+            'echo': 'Clear, expressive voice (Gemini 2.5 Flash)',
+            'fable': 'Warm, engaging voice (Gemini 2.5 Flash)',
+            'onyx': 'Deep, authoritative voice (Gemini 2.5 Flash)',
+            'nova': 'Bright, energetic voice (Gemini 2.5 Flash)',
+            'shimmer': 'Soft, gentle voice (Gemini 2.5 Flash)'
+        }
+    }
+    
+    # Fallback to provider-based voices for unknown models
+    provider_fallback = {
         'openai': {
             'alloy': 'Neutral, balanced voice',
             'echo': 'Clear, expressive voice',
@@ -283,11 +320,12 @@ def list_voices(
         }
     }
     
-    provider_voices = voice_info.get(model_config.provider, {'default': 'Default voice'})
+    # Try to get model-specific voices first, then fall back to provider voices
+    voices = model_voices.get(model_config.model) or provider_fallback.get(model_config.provider, {'default': 'Default voice'})
     
     console.print(f"[bold]Available voices for {model_config.name} ({model_config.provider}):[/bold]\n")
     
-    for voice_id, description in provider_voices.items():
+    for voice_id, description in voices.items():
         current_marker = " [dim](current)[/dim]" if voice_id == getattr(model_config, 'voice', 'alloy') else ""
         console.print(f"• [cyan]{voice_id}[/cyan]{current_marker}: {description}")
     
