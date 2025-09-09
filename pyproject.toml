@@ -23,8 +23,8 @@ readme = "README.md"
 requires-python = ">= 3.8"
 
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["nuitka>=1.8"]
+build-backend = "nuitka.build"
 
 [tool.rye]
 managed = true
@@ -38,3 +38,12 @@ packages = ["src/audai"]
 
 [project.scripts]
 audai = "audai.cli:main_cli"
+nuitka-build = "nuitka.__main__:main --standalone --onefile src/audai/__main__.py"
+
+[tool.nuitka]
+standalone = true       # include Python interpreter + dependencies
+onefile = true          # bundle into single exe
+output-dir = "dist"     # directory for exe
+lto = true              # optional speed optimization
+nofollow-import-to = ["tkinter"]  # optional to reduce size
+main-script = "src/audai/__main__.py"
